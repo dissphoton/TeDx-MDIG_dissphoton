@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TEDxMDIGurgaon 7.0 — Metanoia</title>
+<meta name="description" content="TEDxMDIGurgaon 7.0 — Metanoia. An independently organized TED event." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          tedred: '#EB0028',
+          'tedred-dim': '#B5001F',
+          ink: '#040404',
+          charcoal: '#141416',
+          'charcoal-2': '#1b1b1f',
+          mist: '#9a9aa2',
+          'mist-dim': '#6b6b72',
+        },
+        fontFamily: {
+          sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  :root {
+    --ted-red: #EB0028;
+    --ink: #040404;
+  }
+
+  * { -webkit-tap-highlight-color: transparent; }
+
+  html { scroll-behavior: smooth; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  body {
+    background: var(--ink);
+    color: #f4f4f5;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--ted-red); color: #fff; }
+
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--ink); }
+  ::-webkit-scrollbar-thumb { background: #2a2a2e; border-radius: 8px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ted-red); }
+
+  :focus-visible {
+    outline: 2px solid var(--ted-red);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* ---------- Nav ---------- */
+  #nav {
+    transition: background-color .5s cubic-bezier(.16,1,.3,1), border-color .5s cubic-bezier(.16,1,.3,1), backdrop-filter .5s;
+    background-color: transparent;
+    border-bottom: 1px solid transparent;
+  }
+  #nav.scrolled {
+    background-color: rgba(4,4,4,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1);
+    transition-delay: var(--d, 0s);
+  }
+  .reveal.left { transform: translateX(-36px); }
+  .reveal.right { transform: translateX(36px); }
+  .reveal.in-view { opacity: 1; transform: none; }
+
+  /* ---------- Glass ---------- */
+  .glass {
+    background: rgba(255,255,255,0.045);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.10);
+  }
+
+  /* ---------- Hero spotlight ---------- */
+  .spotlight {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(650px circle at var(--x, 50%) var(--y, 20%), rgba(235,0,40,0.16), transparent 55%);
+    transition: background .3s ease-out;
+    pointer-events: none;
+  }
+
+  .hero-noise {
+    position: absolute;
+    inset: 0;
+    opacity: 0.35;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+
+  .hero-aurora {
+    position: absolute;
+    inset: -20%;
+    background:
+      radial-gradient(38% 45% at 18% 22%, rgba(235,0,40,0.30), transparent 60%),
+      radial-gradient(30% 38% at 82% 12%, rgba(235,0,40,0.14), transparent 60%),
+      radial-gradient(45% 40% at 50% 100%, rgba(255,255,255,0.05), transparent 65%);
+    filter: blur(60px);
+    animation: aurora-drift 22s ease-in-out infinite alternate;
+  }
+  @keyframes aurora-drift {
+    0%   { transform: translate3d(0,0,0) scale(1); }
+    100% { transform: translate3d(-2%, 3%, 0) scale(1.08); }
+  }
+
+  /* ---------- Particles ---------- */
+  .particle {
+    position: absolute;
+    bottom: -10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.55);
+    animation-name: float-up;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  .particle.red { background: rgba(235,0,40,0.85); }
+  @keyframes float-up {
+    0%   { transform: translateY(0) translateX(0); opacity: 0; }
+    8%   { opacity: 1; }
+    92%  { opacity: 1; }
+    100% { transform: translateY(-110vh) translateX(var(--drift, 20px)); opacity: 0; }
+  }
+
+  /* ---------- Scroll indicator ---------- */
+  @keyframes scroll-dot {
+    0% { transform: translateY(0); opacity: 0; }
+    30% { opacity: 1; }
+    100% { transform: translateY(16px); opacity: 0; }
+  }
+  .scroll-dot { animation: scroll-dot 1.8s ease-in-out infinite; }
+
+  /* ---------- Featured talk preview ---------- */
+  .talk-preview {
+    transition: transform .6s cubic-bezier(.16,1,.3,1), box-shadow .6s cubic-bezier(.16,1,.3,1);
+  }
+  .talk-preview:hover {
+    transform: scale(1.015);
+    box-shadow: 0 30px 80px -20px rgba(235,0,40,0.35);
+  }
+  .play-btn {
+    transition: transform .35s cubic-bezier(.34,1.56,.64,1), background-color .35s;
+  }
+  .talk-preview:hover .play-btn { transform: scale(1.12); }
+
+  #ytFrame, #ytFrame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    border: 0;
+    pointer-events: none; /* it's a silent, non-interactive marquee loop — use the link/unmute button instead */
+  }
+
+  /* ---------- Metanoia signature ---------- */
+  .metanoia-wrap {
+    position: relative;
+    display: inline-block;
+    line-height: 0.86;
+  }
+  .metanoia-base, .metanoia-ghost {
+    font-weight: 900;
+    letter-spacing: -0.035em;
+    font-size: clamp(3.4rem, 11vw, 9.5rem);
+    white-space: nowrap;
+  }
+  .metanoia-base { color: #f4f4f5; position: relative; z-index: 2; }
+  .metanoia-ghost {
+    position: absolute;
+    inset: 0;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--ted-red);
+    z-index: 1;
+    transform: translate3d(calc(var(--shift, 0) * -1px), calc(var(--shift, 0) * 0.35px), 0) scaleX(-1);
+    opacity: calc(0.5 + var(--shift, 0) * 0.01);
+    transition: transform .05s linear;
+    transform-origin: right center;
+  }
+
+  /* ---------- Morph orb ---------- */
+  .orb-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(235,0,40,0.55), rgba(235,0,40,0.05) 55%, transparent 70%);
+    filter: blur(24px);
+    animation: orb-pulse 6s ease-in-out infinite;
+  }
+  @keyframes orb-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.85; }
+    50% { transform: scale(1.08); opacity: 1; }
+  }
+  .orb-shape {
+    animation: orb-morph 14s ease-in-out infinite, orb-spin 40s linear infinite;
+    transform-origin: 50% 50%;
+  }
+  @keyframes orb-morph {
+    0%, 100% { d: path('M300,80 C420,80 480,180 480,300 C480,420 400,480 300,480 C180,480 100,420 100,300 C100,170 180,80 300,80 Z'); }
+    33% { d: path('M300,60 C400,90 500,160 460,290 C430,410 340,470 240,460 C120,450 80,340 100,240 C120,130 200,40 300,60 Z'); }
+    66% { d: path('M280,90 C400,70 470,190 470,300 C470,400 420,470 300,470 C190,470 90,400 110,290 C130,170 190,110 280,90 Z'); }
+  }
+  @keyframes orb-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* ---------- Speaker cards ---------- */
+  .speaker-card { transition: transform .5s cubic-bezier(.16,1,.3,1); }
+  .speaker-card:hover { transform: translateY(-10px); }
+  .speaker-frame {
+    transition: box-shadow .5s ease, border-color .5s ease;
+  }
+  .speaker-card:hover .speaker-frame {
+    box-shadow: 0 26px 60px -18px rgba(235,0,40,0.45);
+    border-color: rgba(235,0,40,0.45);
+  }
+  .speaker-avatar { transition: transform .7s cubic-bezier(.16,1,.3,1); }
+  .speaker-card:hover .speaker-avatar { transform: scale(1.07); }
+  .speaker-more {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .4s ease, transform .4s ease;
+  }
+  .speaker-card:hover .speaker-more { opacity: 1; transform: translateY(0); }
+
+  /* ---------- Ticket ---------- */
+  .ticket-border {
+    position: relative;
+    border-radius: 28px;
+    padding: 1.5px;
+  }
+  .ticket-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+    padding: 1.5px;
+    background: conic-gradient(from var(--angle, 0deg), transparent 0%, rgba(235,0,40,0.9) 12%, transparent 28%, transparent 72%, rgba(235,0,40,0.7) 88%, transparent 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: rotate-border 6s linear infinite;
+  }
+  @keyframes rotate-border {
+    to { --angle: 360deg; }
+  }
+  @property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  .ticket-illustration { animation: ticket-float 5s ease-in-out infinite; }
+  @keyframes ticket-float {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50% { transform: translateY(-14px) rotate(2deg); }
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn-ripple { position: relative; overflow: hidden; }
+  .ripple-el {
+    position: absolute;
+    border-radius: 999px;
+    transform: scale(0);
+    background: rgba(255,255,255,0.35);
+    animation: ripple-anim .65s ease-out;
+    pointer-events: none;
+  }
+  @keyframes ripple-anim {
+    to { transform: scale(3.2); opacity: 0; }
+  }
+  .btn-primary {
+    transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .35s ease, background-color .35s ease;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px -10px rgba(235,0,40,0.55);
+  }
+  .btn-ghost {
+    transition: border-color .35s ease, background-color .35s ease, transform .35s ease;
+  }
+  .btn-ghost:hover {
+    border-color: rgba(255,255,255,0.55);
+    background-color: rgba(255,255,255,0.06);
+    transform: translateY(-2px);
+  }
+
+  /* ---------- Stage grid backdrop ---------- */
+  .stage-grid {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+    background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 40%, transparent 85%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 40%, transparent 85%);
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.22em;
+  }
+
+  .badge-num {
+    font-family: 'JetBrains Mono', monospace;
+  }
+</style>
+</head>
+
+<body class="bg-ink antialiased">
+
+  <!-- =========================================================
+       NAV
+  ========================================================== -->
+  <nav id="nav" class="fixed top-0 inset-x-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 flex items-center justify-between h-20">
+      <a href="#home" class="flex items-center gap-2 group">
+        <span class="text-xl md:text-2xl font-extrabold tracking-tight">
+          TEDx<span class="text-tedred">MDIGurgaon</span>
+        </span>
+        <span class="badge-num text-[11px] text-mist-dim border border-white/15 rounded-full px-2 py-0.5 mt-1 group-hover:border-tedred/60 transition-colors">7.0</span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-9 text-sm text-mist">
+        <a href="#home" class="hover:text-white transition-colors">Home</a>
+        <a href="#theme" class="hover:text-white transition-colors">Theme</a>
+        <a href="#speakers" class="hover:text-white transition-colors">Speakers</a>
+        <a href="#tickets" class="hover:text-white transition-colors">Tickets</a>
+        <a href="#apply" class="hover:text-white transition-colors">Apply</a>
+        <a href="#about" class="hover:text-white transition-colors">About</a>
+      </div>
+
+      <a href="#apply" class="btn-ripple btn-primary hidden md:inline-flex items-center gap-2 bg-tedred text-white text-sm font-semibold px-5 py-2.5 rounded-full">
+        Book Now
+      </a>
+
+      <button id="menuBtn" aria-label="Open menu" aria-expanded="false" class="md:hidden text-white p-2">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <!-- mobile menu -->
+    <div id="mobileMenu" class="md:hidden hidden flex-col gap-1 px-6 pb-6 bg-ink/95 backdrop-blur-xl border-b border-white/10">
+      <a href="#home" class="py-3 text-mist border-b border-white/5">Home</a>
+      <a href="#theme" class="py-3 text-mist border-b border-white/5">Theme</a>
+      <a href="#speakers" class="py-3 text-mist border-b border-white/5">Speakers</a>
+      <a href="#tickets" class="py-3 text-mist border-b border-white/5">Tickets</a>
+      <a href="#apply" class="py-3 text-mist border-b border-white/5">Apply</a>
+      <a href="#about" class="py-3 text-mist border-b border-white/5">About</a>
+      <a href="#apply" class="mt-4 text-center bg-tedred text-white font-semibold px-5 py-3 rounded-full">Book Now</a>
+    </div>
+  </nav>
+
+  <!-- =========================================================
+       HERO
+  ========================================================== -->
+  <section id="home" class="relative min-h-[100svh] flex flex-col justify-center overflow-hidden bg-ink">
+    <div class="hero-aurora"></div>
+    <div class="hero-noise"></div>
+    <div class="spotlight" id="heroSpotlight"></div>
+    <div id="particles" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-10 w-full pt-28 pb-16">
+      <p class="eyebrow reveal text-tedred text-xs md:text-sm uppercase mb-6" style="--d:0s">
+        Ideas worth spreading &nbsp;·&nbsp; Gurgaon, India
+      </p>
+
+      <h1 class="reveal text-[15vw] md:text-[7.2rem] leading-[0.92] font-extrabold tracking-tight" style="--d:.08s">
+        TEDx<span class="text-tedred">MDI</span>Gurgaon
+        <span class="align-super text-[0.28em] font-mono text-mist ml-2">7.0</span>
+      </h1>
+
+      <p class="reveal italic font-light text-3xl md:text-5xl text-white/90 mt-3" style="--d:.16s">Metanoia</p>
+
+      <p class="reveal eyebrow text-mist-dim text-xs md:text-sm mt-6 max-w-md" style="--d:.24s">
+        An independently organized TED event
+      </p>
+
+      <div class="reveal flex flex-col sm:flex-row gap-4 mt-10" style="--d:.32s">
+        <a href="#apply" class="btn-ripple btn-primary inline-flex items-center justify-center gap-2 bg-tedred text-white font-semibold px-8 py-4 rounded-full text-sm">
+          Reserve Your Seat
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#watch" class="btn-ghost inline-flex items-center justify-center gap-2 border border-white/25 text-white font-semibold px-8 py-4 rounded-full text-sm">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5L12 7L3 12.5V1.5Z"/></svg>
+          Watch Highlight
+        </a>
+      </div>
+    </div>
+
+    <!-- Featured talk preview — marquee highlight (YouTube embed, looping 10s–20s) -->
+    <div id="watch" class="relative z-10 max-w-4xl mx-auto w-full px-6 md:px-10 pb-20 -mt-4">
+      <div class="talk-preview reveal glass rounded-3xl overflow-hidden relative" style="--d:.4s">
+        <div class="relative aspect-video bg-charcoal" id="videoStage">
+          <div id="ytFrame"></div>
+
+          <!-- unmute toggle — browsers require autoplay to start muted -->
+          <button id="unmuteBtn" type="button" aria-label="Unmute preview"
+            class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full glass flex items-center justify-center text-white hover:border-tedred/60 transition-colors">
+            <svg id="iconMuted" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9V15H8L13 20V4L8 9H4Z" fill="currentColor"/><path d="M17 8L22 16M22 8L17 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <svg id="iconUnmuted" width="16" height="16" viewBox="0 0 24 24" fill="none" class="hidden"><path d="M4 9V15H8L13 20V4L8 9H4Z" fill="currentColor"/><path d="M16 8.5C17.2 9.6 17.9 11.1 17.9 12.7C17.9 14.3 17.2 15.8 16 16.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18.6 5.8C20.6 7.6 21.8 10.1 21.8 12.7C21.8 15.3 20.6 17.8 18.6 19.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+
+          <!-- overlay meta -->
+          <div class="absolute inset-x-0 bottom-0 p-5 md:p-7 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none z-10">
+            <p class="eyebrow text-tedred text-[10px] mb-1.5">TEDxMDIGurgaon 6.0</p>
+            <p class="font-semibold text-white text-base md:text-lg leading-tight">Dr. Dheeraj Dogra — Beyond Brick and Mortar</p>
+            <a href="https://www.youtube.com/watch?v=vDZmVg7MtcY" target="_blank" rel="noopener noreferrer" class="text-mist text-xs md:text-sm mt-1 inline-flex items-center gap-1 pointer-events-auto hover:text-white transition-colors">
+              Watch the full talk
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 9L9 3M9 3H4M9 3V8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="#theme" class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-mist-dim">
+      <span class="eyebrow text-[10px]">SCROLL</span>
+      <span class="w-[1px] h-8 bg-white/20 relative overflow-hidden">
+        <span class="scroll-dot absolute top-0 left-0 w-full h-2 bg-tedred"></span>
+      </span>
+    </a>
+  </section>
+
+  <!-- =========================================================
+       THEME REVEAL
+  ========================================================== -->
+  <section id="theme" class="relative py-32 md:py-44 bg-ink overflow-hidden">
+    <div class="absolute -left-40 top-1/4 w-[500px] h-[500px] rounded-full bg-tedred/10 blur-[120px]"></div>
+
+    <div class="max-w-7xl mx-auto px-6 md:px-10 grid md:grid-cols-2 gap-16 md:gap-10 items-center">
+      <div>
+        <p class="eyebrow reveal left text-tedred text-xs mb-6" style="--d:0s">The Theme — 7.0</p>
+
+        <div id="metanoiaSection" class="metanoia-wrap reveal left" style="--d:.08s">
+          <span class="metanoia-base">METANOIA</span>
+          <span class="metanoia-ghost" aria-hidden="true">METANOIA</span>
+        </div>
+
+        <p class="reveal left text-mist text-lg md:text-xl leading-relaxed mt-10 max-w-lg font-light" style="--d:.16s">
+          From the Greek <em class="text-white not-italic font-medium">meta</em> (beyond) and <em class="text-white not-italic font-medium">noeo</em> (to perceive) — a change of mind so complete it feels like waking up. This year, TEDxMDIGurgaon sits inside that turn: the moment a belief loosens its grip, a habit breaks its pattern, and a person steps into a version of themselves they hadn't met yet.
+        </p>
+        <p class="reveal left text-mist-dim leading-relaxed mt-5 max-w-lg font-light" style="--d:.22s">
+          Seven editions in, we're not asking our speakers for answers. We're asking for the exact second the question changed.
+        </p>
+      </div>
+
+      <div class="reveal right relative flex items-center justify-center h-[380px] md:h-[460px]" style="--d:.12s">
+        <div class="orb-glow" style="width:320px;height:320px;left:50%;top:50%;transform:translate(-50%,-50%);"></div>
+        <svg viewBox="0 0 600 600" class="relative w-[300px] md:w-[380px] h-auto">
+          <defs>
+            <linearGradient id="orbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#EB0028" stop-opacity="0.9"/>
+              <stop offset="55%" stop-color="#EB0028" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0.05"/>
+            </linearGradient>
+          </defs>
+          <path class="orb-shape" fill="url(#orbGrad)" stroke="rgba(255,255,255,0.25)" stroke-width="1"
+            d="M300,80 C420,80 480,180 480,300 C480,420 400,480 300,480 C180,480 100,420 100,300 C100,170 180,80 300,80 Z" />
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       SPEAKERS
+  ========================================================== -->
+  <section id="speakers" class="relative py-28 md:py-36 bg-charcoal">
+    <div class="max-w-7xl mx-auto px-6 md:px-10">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
+        <div>
+          <p class="eyebrow reveal text-tedred text-xs mb-4" style="--d:0s">The Lineup</p>
+          <h2 class="reveal text-4xl md:text-6xl font-extrabold tracking-tight" style="--d:.06s">Speakers</h2>
+        </div>
+        <p class="reveal text-mist max-w-sm font-light" style="--d:.12s">
+          Four voices, four disciplines — brought together by the same instinct: to see what everyone else looked past.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-7">
+
+        <!-- Speaker card template x4 -->
+        <article class="speaker-card reveal" style="--d:0s">
+          <div class="speaker-frame relative rounded-3xl overflow-hidden border border-white/10 bg-ink">
+            <div class="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-charcoal-2 to-ink">
+              <div class="speaker-avatar absolute inset-0 flex items-center justify-center bg-gradient-to-br from-tedred/25 via-charcoal-2 to-ink">
+                <span class="text-6xl font-extrabold text-white/15">NG</span>
+              </div>
+              <div class="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/90 to-transparent">
+                <span class="badge-num text-[10px] text-tedred">N°01</span>
+                <h3 class="font-bold text-lg mt-1 leading-tight">Nitin Gadkari</h3>
+                <p class="text-mist text-xs mt-0.5">Union Minister, Road Transport &amp; Highways</p>
+              </div>
+            </div>
+            <div class="p-5">
+              <p class="text-mist-dim text-sm font-light leading-relaxed">On building infrastructure that outlives the politics around it.</p>
+              <button class="speaker-more mt-4 inline-flex items-center gap-1.5 text-tedred text-xs font-semibold">
+                Know More
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6H9.5M9.5 6L6 2.5M9.5 6L6 9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="speaker-card reveal" style="--d:.06s">
+          <div class="speaker-frame relative rounded-3xl overflow-hidden border border-white/10 bg-ink">
+            <div class="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-charcoal-2 to-ink">
+              <div class="speaker-avatar absolute inset-0 flex items-center justify-center bg-gradient-to-br from-tedred/25 via-charcoal-2 to-ink">
+                <span class="text-6xl font-extrabold text-white/15">AW</span>
+              </div>
+              <div class="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/90 to-transparent">
+                <span class="badge-num text-[10px] text-tedred">N°02</span>
+                <h3 class="font-bold text-lg mt-1 leading-tight">Ankur Warikoo</h3>
+                <p class="text-mist text-xs mt-0.5">Entrepreneur, Author &amp; Content Creator</p>
+              </div>
+            </div>
+            <div class="p-5">
+              <p class="text-mist-dim text-sm font-light leading-relaxed">On unlearning the definition of success he once chased.</p>
+              <button class="speaker-more mt-4 inline-flex items-center gap-1.5 text-tedred text-xs font-semibold">
+                Know More
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6H9.5M9.5 6L6 2.5M9.5 6L6 9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="speaker-card reveal" style="--d:.12s">
+          <div class="speaker-frame relative rounded-3xl overflow-hidden border border-white/10 bg-ink">
+            <div class="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-charcoal-2 to-ink">
+              <div class="speaker-avatar absolute inset-0 flex items-center justify-center bg-gradient-to-br from-tedred/25 via-charcoal-2 to-ink">
+                <span class="text-6xl font-extrabold text-white/15">RB</span>
+              </div>
+              <div class="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/90 to-transparent">
+                <span class="badge-num text-[10px] text-tedred">N°03</span>
+                <h3 class="font-bold text-lg mt-1 leading-tight">Ritwik Bhowmik</h3>
+                <p class="text-mist text-xs mt-0.5">Actor</p>
+              </div>
+            </div>
+            <div class="p-5">
+              <p class="text-mist-dim text-sm font-light leading-relaxed">On playing characters that taught him who he wasn't.</p>
+              <button class="speaker-more mt-4 inline-flex items-center gap-1.5 text-tedred text-xs font-semibold">
+                Know More
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6H9.5M9.5 6L6 2.5M9.5 6L6 9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="speaker-card reveal" style="--d:.18s">
+          <div class="speaker-frame relative rounded-3xl overflow-hidden border border-white/10 bg-ink">
+            <div class="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-charcoal-2 to-ink">
+              <div class="speaker-avatar absolute inset-0 flex items-center justify-center bg-gradient-to-br from-tedred/25 via-charcoal-2 to-ink">
+                <span class="text-6xl font-extrabold text-white/15">TL</span>
+              </div>
+              <div class="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/90 to-transparent">
+                <span class="badge-num text-[10px] text-tedred">N°04</span>
+                <h3 class="font-bold text-lg mt-1 leading-tight">Terrence Lewis</h3>
+                <p class="text-mist text-xs mt-0.5">Choreographer &amp; Dance Artist</p>
+              </div>
+            </div>
+            <div class="p-5">
+              <p class="text-mist-dim text-sm font-light leading-relaxed">On the split second a body finds a language words can't.</p>
+              <button class="speaker-more mt-4 inline-flex items-center gap-1.5 text-tedred text-xs font-semibold">
+                Know More
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6H9.5M9.5 6L6 2.5M9.5 6L6 9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       TICKETS
+  ========================================================== -->
+  <section id="tickets" class="relative py-28 md:py-40 bg-ink overflow-hidden">
+    <div class="stage-grid absolute inset-0"></div>
+    <div class="absolute left-1/2 top-0 -translate-x-1/2 w-[600px] h-[400px] bg-tedred/10 blur-[140px] rounded-full"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6 md:px-10 text-center">
+      <p class="eyebrow reveal text-tedred text-xs mb-5" style="--d:0s">Reserve Your Seat</p>
+      <h2 class="reveal text-4xl md:text-6xl font-extrabold tracking-tight max-w-3xl mx-auto leading-[1.05]" style="--d:.06s">
+        Experience Ideas Worth Spreading
+      </h2>
+
+      <div class="reveal relative max-w-md mx-auto mt-16" style="--d:.14s">
+        <!-- floating ticket illustration -->
+        <svg class="ticket-illustration absolute -top-14 -right-6 md:-right-16 w-20 h-20 md:w-24 md:h-24 text-tedred/70" viewBox="0 0 64 64" fill="none">
+          <path d="M6 22C6 18.7 8.7 16 12 16H52C55.3 16 58 18.7 58 22V26C55.2 26 53 28.2 53 31C53 33.8 55.2 36 58 36V40C58 43.3 55.3 46 52 46H12C8.7 46 6 43.3 6 40V36C8.8 36 11 33.8 11 31C11 28.2 8.8 26 6 26V22Z" stroke="currentColor" stroke-width="2"/>
+          <path d="M28 16V46" stroke="currentColor" stroke-width="2" stroke-dasharray="3 4"/>
+        </svg>
+
+        <div class="ticket-border">
+          <div class="glass rounded-[26px] p-8 md:p-10 text-left">
+            <div class="flex items-start justify-between mb-8">
+              <div>
+                <p class="eyebrow text-tedred text-[10px] mb-1">TEDxMDIGurgaon</p>
+                <p class="font-extrabold text-2xl">7.0 — Metanoia</p>
+              </div>
+              <span class="badge-num text-[10px] text-mist-dim border border-white/15 rounded-full px-2.5 py-1">GA-0724</span>
+            </div>
+
+            <div class="space-y-4 border-t border-b border-white/10 py-6">
+              <div class="flex justify-between text-sm">
+                <span class="text-mist-dim">Date</span>
+                <span class="font-medium">To be announced</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-mist-dim">Venue</span>
+                <span class="font-medium">MDI Gurgaon, Mehrauli Road</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-mist-dim">Time</span>
+                <span class="font-medium">9:00 AM onward</span>
+              </div>
+            </div>
+
+            <div class="flex items-end justify-between mt-7">
+              <div>
+                <p class="text-mist-dim text-xs mb-1">Starting from</p>
+                <p class="text-3xl font-extrabold">₹ —</p>
+              </div>
+              <a href="#apply" class="btn-ripple btn-primary inline-flex items-center gap-2 bg-tedred text-white font-semibold px-6 py-3.5 rounded-full text-sm">
+                Book Now
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       APPLY — Seat Application Form
+  ========================================================== -->
+  <section id="apply" class="relative py-28 md:py-36 bg-charcoal overflow-hidden">
+    <div class="absolute right-0 top-0 w-[500px] h-[500px] bg-tedred/8 blur-[140px] rounded-full"></div>
+
+    <div class="relative max-w-3xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-14">
+        <p class="eyebrow reveal text-tedred text-xs mb-5" style="--d:0s">Seats Are Limited</p>
+        <h2 class="reveal text-4xl md:text-6xl font-extrabold tracking-tight" style="--d:.06s">Apply to Attend</h2>
+        <p class="reveal text-mist font-light max-w-lg mx-auto mt-5" style="--d:.12s">
+          TEDxMDIGurgaon 7.0 is curated, not first-come-first-served. Tell us a little about you — we review every application.
+        </p>
+      </div>
+
+      <div class="reveal glass rounded-[28px] p-7 md:p-12" style="--d:.16s">
+
+        <!-- success state (hidden by default) -->
+        <div id="applySuccess" class="hidden flex-col items-center text-center py-10">
+          <div class="w-16 h-16 rounded-full bg-tedred/15 border border-tedred/40 flex items-center justify-center mb-6">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 13L9.5 17.5L19 7" stroke="#EB0028" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 class="text-2xl font-bold mb-2">Application received</h3>
+          <p class="text-mist font-light max-w-sm">We'll email you once applications are reviewed. Keep an eye on your inbox — and your spam folder.</p>
+        </div>
+
+        <form id="applyForm" class="grid sm:grid-cols-2 gap-5">
+          <div class="sm:col-span-1">
+            <label for="fullName" class="block text-xs text-mist-dim mb-2 eyebrow">Full Name *</label>
+            <input id="fullName" name="fullName" type="text" required autocomplete="name"
+              class="w-full bg-white/5 border border-white/12 rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-mist-dim/60 focus:border-tedred focus:bg-white/[0.07] outline-none transition-colors"
+              placeholder="Jane Doe" />
+          </div>
+
+          <div class="sm:col-span-1">
+            <label for="email" class="block text-xs text-mist-dim mb-2 eyebrow">Email *</label>
+            <input id="email" name="email" type="email" required autocomplete="email"
+              class="w-full bg-white/5 border border-white/12 rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-mist-dim/60 focus:border-tedred focus:bg-white/[0.07] outline-none transition-colors"
+              placeholder="jane@email.com" />
+          </div>
+
+          <div class="sm:col-span-1">
+            <label for="phone" class="block text-xs text-mist-dim mb-2 eyebrow">Phone Number *</label>
+            <input id="phone" name="phone" type="tel" required autocomplete="tel"
+              class="w-full bg-white/5 border border-white/12 rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-mist-dim/60 focus:border-tedred focus:bg-white/[0.07] outline-none transition-colors"
+              placeholder="+91 98765 43210" />
+          </div>
+
+          <div class="sm:col-span-1">
+            <label for="org" class="block text-xs text-mist-dim mb-2 eyebrow">College / Organization *</label>
+            <input id="org" name="org" type="text" required autocomplete="organization"
+              class="w-full bg-white/5 border border-white/12 rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-mist-dim/60 focus:border-tedred focus:bg-white/[0.07] outline-none transition-colors"
+              placeholder="MDI Gurgaon" />
+          </div>
+
+          <div class="sm:col-span-2">
+            <label for="role" class="block text-xs text-mist-dim mb-2 eyebrow">You are a</label>
+            <select id="role" name="role"
+              class="w-full bg-white/5 border border-white/12 rounded-xl px-4 py-3.5 text-sm text-white outline-none focus:border-tedred focus:bg-white/[0.07] transition-colors appearance-none">
+              <option class="bg-charcoal" value="student">Student</option>
+              <option class="bg-charcoal" value="professional">Working Professional</option>
+              <option class="bg-charcoal" value="entrepreneur">Entrepreneur</option>
+              <option class="bg-charcoal" value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label for="motivation" class="block text-xs text-mist-dim mb-2 eyebrow">Why do you want to attend TEDxMDIGurgaon 7.0? *</label>
+            <textarea id="motivation" name="motivation" required rows="4"
+              class="w-full bg-white/5 border border-white/12 rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-mist-dim/60 focus:border-tedred focus:bg-white/[0.07] outline-none transition-colors resize-none"
+              placeholder="Tell us in a few lines — a curious answer stands out more than a polished one."></textarea>
+          </div>
+
+          <label class="sm:col-span-2 flex items-start gap-3 text-xs text-mist-dim mt-1">
+            <input type="checkbox" required class="mt-0.5 accent-tedred w-4 h-4 rounded" />
+            I understand this is an application and does not guarantee a seat.
+          </label>
+
+          <div class="sm:col-span-2 flex flex-col sm:flex-row items-center gap-4 justify-between mt-3">
+            <p id="applyError" class="hidden text-tedred text-xs">Please fill in all required fields.</p>
+            <button type="submit" class="btn-ripple btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-tedred text-white font-semibold px-8 py-4 rounded-full text-sm ml-auto">
+              Submit Application
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       ABOUT (light footer anchor section)
+  ========================================================== -->
+  <section id="about" class="py-24 md:py-32 bg-charcoal">
+    <div class="max-w-4xl mx-auto px-6 md:px-10 text-center">
+      <p class="eyebrow reveal text-tedred text-xs mb-5" style="--d:0s">About the Event</p>
+      <p class="reveal text-mist text-lg md:text-2xl font-light leading-relaxed" style="--d:.08s">
+        TEDxMDIGurgaon is an independently organized TED event, held under license from TED, bringing together
+        speakers from business, public service, the arts and beyond to share ideas that shift how a room thinks.
+        This is our seventh edition.
+      </p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       FOOTER
+  ========================================================== -->
+  <footer class="relative bg-ink border-t border-white/10 py-14">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-8">
+      <div class="flex items-center gap-2">
+        <span class="text-lg font-extrabold tracking-tight">TEDx<span class="text-tedred">MDIGurgaon</span></span>
+        <span class="badge-num text-[10px] text-mist-dim border border-white/15 rounded-full px-2 py-0.5">7.0</span>
+      </div>
+
+      <div class="flex items-center gap-5">
+        <a href="#" aria-label="Instagram" class="text-mist hover:text-tedred transition-colors">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.6"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor"/></svg>
+        </a>
+        <a href="#" aria-label="LinkedIn" class="text-mist hover:text-tedred transition-colors">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="1.6"/><path d="M7 10v7M7 7.2v.01M12 17v-4.2c0-1.5 1-2.3 2.2-2.3 1.2 0 2 .8 2 2.3V17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </a>
+        <a href="#" aria-label="YouTube" class="text-mist hover:text-tedred transition-colors">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="4" stroke="currentColor" stroke-width="1.6"/><path d="M10.5 9.5L15 12L10.5 14.5V9.5Z" fill="currentColor"/></svg>
+        </a>
+      </div>
+
+      <div class="text-center md:text-right">
+        <a href="mailto:hello@tedxmdigurgaon.com" class="text-mist text-sm hover:text-white transition-colors">hello@tedxmdigurgaon.com</a>
+        <p class="text-mist-dim text-xs mt-1">© 2026 TEDxMDIGurgaon. This independent TEDx event is operated under license from TED.</p>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  // ---------- Nav scroll state ----------
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ---------- Mobile menu ----------
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => {
+    const isOpen = !mobileMenu.classList.contains('hidden');
+    mobileMenu.classList.toggle('hidden');
+    mobileMenu.classList.toggle('flex');
+    menuBtn.setAttribute('aria-expanded', String(!isOpen));
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mobileMenu.classList.add('hidden');
+    mobileMenu.classList.remove('flex');
+  }));
+
+  // ---------- Scroll reveal ----------
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+  revealEls.forEach(el => io.observe(el));
+
+  // ---------- Hero spotlight follows cursor ----------
+  const heroSection = document.getElementById('home');
+  const spotlight = document.getElementById('heroSpotlight');
+  heroSection.addEventListener('mousemove', (e) => {
+    const rect = heroSection.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    spotlight.style.setProperty('--x', x + '%');
+    spotlight.style.setProperty('--y', y + '%');
+  });
+
+  // ---------- Ambient particles ----------
+  const particleHost = document.getElementById('particles');
+  const PARTICLE_COUNT = 26;
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const p = document.createElement('span');
+    const isRed = Math.random() < 0.35;
+    const size = 2 + Math.random() * 3;
+    p.className = 'particle' + (isRed ? ' red' : '');
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
+    p.style.animationDuration = (10 + Math.random() * 14) + 's';
+    p.style.animationDelay = (Math.random() * -20) + 's';
+    p.style.opacity = (0.3 + Math.random() * 0.5).toString();
+    particleHost.appendChild(p);
+  }
+
+  // ---------- Metanoia signature: scroll-driven perspective shift ----------
+  const metanoiaSection = document.getElementById('metanoiaSection');
+  const updateMetanoia = () => {
+    const rect = metanoiaSection.getBoundingClientRect();
+    const vh = window.innerHeight;
+    // progress: 0 when entering viewport bottom, 1 when centered/above
+    let progress = 1 - (rect.top + rect.height / 2) / vh;
+    progress = Math.max(0, Math.min(1, progress));
+    metanoiaSection.style.setProperty('--shift', (progress * 26).toFixed(2));
+  };
+  document.addEventListener('scroll', updateMetanoia, { passive: true });
+  updateMetanoia();
+
+  // ---------- Button ripple ----------
+  document.querySelectorAll('.btn-ripple').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      const rect = this.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      const size = Math.max(rect.width, rect.height);
+      ripple.className = 'ripple-el';
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+      ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+      this.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 650);
+    });
+  });
+
+  // ---------- Application form ----------
+  // NOTE: This is a front-end-only demo submission. To actually collect responses,
+  // point this at a real endpoint — e.g. a Formspree/Google Form action URL, or your
+  // own backend — and replace the setTimeout below with a real fetch() call.
+  const applyForm = document.getElementById('applyForm');
+  const applySuccess = document.getElementById('applySuccess');
+  const applyError = document.getElementById('applyError');
+
+  applyForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!applyForm.checkValidity()) {
+      applyForm.reportValidity();
+      applyError.classList.remove('hidden');
+      return;
+    }
+    applyError.classList.add('hidden');
+
+    const submitBtn = applyForm.querySelector('button[type="submit"]');
+    const originalLabel = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Submitting…';
+
+    // Simulated network delay — swap for a real fetch() to your form backend.
+    setTimeout(() => {
+      applyForm.classList.add('hidden');
+      applySuccess.classList.remove('hidden');
+      applySuccess.classList.add('flex');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalLabel;
+    }, 700);
+  });
+
+  // ---------- Marquee highlight: YouTube embed looping 10s–20s, muted autoplay ----------
+  // Browsers block unmuted autoplay, so this starts muted and offers an unmute toggle —
+  // that's a platform constraint, not a bug.
+  const YT_VIDEO_ID = 'vDZmVg7MtcY';
+  const CLIP_START = 10;
+  const CLIP_END = 20;
+  let ytPlayer = null;
+  let ytLoopTimer = null;
+
+  function onYouTubeIframeAPIReady() {
+    ytPlayer = new YT.Player('ytFrame', {
+      width: '100%',
+      height: '100%',
+      videoId: YT_VIDEO_ID,
+      playerVars: {
+        start: CLIP_START,
+        autoplay: 1,
+        mute: 1,
+        controls: 0,
+        disablekb: 1,
+        fs: 0,
+        rel: 0,
+        modestbranding: 1,
+        playsinline: 1,
+        iv_load_policy: 3,
+      },
+      events: {
+        onReady: (e) => { e.target.mute(); e.target.playVideo(); },
+        onStateChange: (e) => {
+          if (e.data === YT.PlayerState.PLAYING) {
+            clearInterval(ytLoopTimer);
+            ytLoopTimer = setInterval(() => {
+              if (ytPlayer.getCurrentTime() >= CLIP_END) {
+                ytPlayer.seekTo(CLIP_START, true);
+              }
+            }, 250);
+          }
+        },
+      },
+    });
+  }
+
+  // Load the IFrame API script
+  const ytScriptTag = document.createElement('script');
+  ytScriptTag.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(ytScriptTag);
+
+  const unmuteBtn = document.getElementById('unmuteBtn');
+  const iconMuted = document.getElementById('iconMuted');
+  const iconUnmuted = document.getElementById('iconUnmuted');
+  unmuteBtn.addEventListener('click', () => {
+    if (!ytPlayer) return;
+    if (ytPlayer.isMuted()) {
+      ytPlayer.unMute();
+      iconMuted.classList.add('hidden');
+      iconUnmuted.classList.remove('hidden');
+    } else {
+      ytPlayer.mute();
+      iconUnmuted.classList.add('hidden');
+      iconMuted.classList.remove('hidden');
+    }
+  });
+</script>
+
+</body>
+</html>
